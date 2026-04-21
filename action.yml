@@ -1,0 +1,73 @@
+name: 'RepoClip Generate Video'
+description: 'Generate a promotional video for your GitHub repository with AI-powered narration, visuals, and music'
+author: 'RepoClip'
+
+branding:
+  icon: 'video'
+  color: 'blue'
+
+inputs:
+  api-key:
+    description: 'RepoClip API key (get one at https://repoclip.io/dashboard/settings)'
+    required: true
+  github-url:
+    description: 'GitHub repository URL (defaults to current repository)'
+    required: false
+  mode:
+    description: 'Video mode: image, video_short, video_long'
+    required: false
+    default: 'image'
+  prompt:
+    description: 'Custom prompt for video generation (max 500 chars)'
+    required: false
+  aspect-ratio:
+    description: 'Aspect ratio: 16:9, 9:16, 1:1'
+    required: false
+    default: '16:9'
+  visual-style:
+    description: 'Visual style: tech, realistic, minimal, vibrant'
+    required: false
+    default: 'tech'
+  bgm:
+    description: 'Enable background music (costs +20 credits)'
+    required: false
+    default: 'false'
+  poll-interval:
+    description: 'Seconds between status checks'
+    required: false
+    default: '30'
+  timeout:
+    description: 'Max wait time in seconds'
+    required: false
+    default: '1200'
+
+outputs:
+  project-id:
+    description: 'UUID of the created project'
+  video-url:
+    description: 'URL of the completed video'
+  thumbnail-url:
+    description: 'URL of the video thumbnail'
+  share-url:
+    description: 'Public share page URL'
+  status:
+    description: 'Final status: completed or failed'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Generate video
+      shell: bash
+      env:
+        REPOCLIP_API_KEY: ${{ inputs.api-key }}
+        REPOCLIP_GITHUB_URL: ${{ inputs.github-url }}
+        REPOCLIP_MODE: ${{ inputs.mode }}
+        REPOCLIP_PROMPT: ${{ inputs.prompt }}
+        REPOCLIP_ASPECT_RATIO: ${{ inputs.aspect-ratio }}
+        REPOCLIP_VISUAL_STYLE: ${{ inputs.visual-style }}
+        REPOCLIP_BGM: ${{ inputs.bgm }}
+        REPOCLIP_POLL_INTERVAL: ${{ inputs.poll-interval }}
+        REPOCLIP_TIMEOUT: ${{ inputs.timeout }}
+        GITHUB_REPOSITORY: ${{ github.repository }}
+        GITHUB_SERVER_URL: ${{ github.server_url }}
+      run: ${{ github.action_path }}/entrypoint.sh
