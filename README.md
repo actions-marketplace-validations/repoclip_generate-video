@@ -14,7 +14,7 @@ jobs:
   video:
     runs-on: ubuntu-latest
     steps:
-      - uses: TwistTheoryGames/generate-video@v1
+      - uses: repoclip/generate-video@v1
         id: video
         with:
           api-key: ${{ secrets.REPOCLIP_API_KEY }}
